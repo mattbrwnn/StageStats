@@ -135,7 +135,7 @@ export default {
   flex-flow: column wrap;
   flex-basis: 20vw;
   background-color: rgb(36, 40, 44);
-  border-radius: 4em;
+  border-radius: 2.5em;
   flex-grow: 1;
   margin-right: 1vh;
   margin-left: 1vh;
@@ -204,9 +204,10 @@ export default {
 }
 .show-buttons-container {
   display: flex;
+  position: absolute;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 20em;
+  margin-top: 33em;
   margin-left: 1.3em;
 }
 .show-buttons-container p {
