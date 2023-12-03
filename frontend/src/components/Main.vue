@@ -11,6 +11,7 @@
           <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="Enter Artist Name">
             <button type="button" class="btn btn-primary">Search</button>
+            
           </div>
           <div class="filter-container">
             <div class="dropdown">
@@ -31,11 +32,21 @@
           <div class="input-group mb-3" style="display: none;">
             <input type="text" class="form-control" placeholder="Year">
           </div>
+          
         </div>
-
+        <div class="show-buttons-container">
+          <h3>Show:</h3>
+          <div class="buttons">
+            <button :class="{ 'btn-active': selectedButton === 'merge' }" @click="selectButton('merge')">Merge</button>
+            <button :class="{ 'btn-active': selectedButton === 'quick' }" @click="selectButton('quick')">Quick</button>
+          </div>
+          <h4>Time Elapsed:</h4>
+        </div>
+        
       </section>
       <section class="content">
         <h2>Contents</h2>
+        <p class="songs-header">Songs most played by:</p>
       </section>
     </div>
 
@@ -47,7 +58,8 @@ export default {
   name: 'MainVue',
   data(){
     return {
-      filters:[]
+      filters:[],
+      selectedButton: '',
     }
   },
   props: {
@@ -65,12 +77,14 @@ export default {
       }
       console.log(this.filters.includes({message: filtername}));
       
+    },
+    selectButton(button) {
+      this.selectedButton = button;
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 
 .main {
@@ -169,6 +183,7 @@ export default {
 
 .content{
   flex-basis: 30vw;
+  padding-top: 15px;
   border: solid;
   border-color: rgb(0, 0, 0);
   flex-grow: 4;
@@ -176,6 +191,45 @@ export default {
   margin-right: 1vh;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
+  
+  flex-direction: column;
 }
+.show-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 20em;
+  margin-left: 1.3em;
+}
+.show-buttons-container p {
+  margin-bottom: 5px;
+}
+.buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+.buttons button {
+  background-color: grey;
+  color: white;
+  margin-bottom: 12px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.buttons .btn-active {
+  background-color: green;
+}
+
+
+.content h2, .content .songs-header {
+  display: block;
+  text-align: left;
+  padding-left: 20px;
+  
+}
+
+
 </style>
