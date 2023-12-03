@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from api import urls as todo_urls
+from api import urls as apiurls
+from rest_framework import routers
+router = routers.DefaultRouter()
 
-urlpatterns = [
+urlpatterns = router.urls
+
+urlpatterns += [
     path('admin/', admin.site.urls),
-    path('setlists/', include(todo_urls)),
+    path('setlists/', include(apiurls)),
 ]

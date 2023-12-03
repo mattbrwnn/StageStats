@@ -2,12 +2,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-class Todo(models.Model):
-    task = models.CharField(max_length = 180)
-    timestamp = models.DateTimeField(auto_now_add = True, auto_now = False, blank = True)
-    completed = models.BooleanField(default = False, blank = True)
-    updated = models.DateTimeField(auto_now = True, blank = True)
-    user = models.ForeignKey(User, on_delete = models.CASCADE, blank = True, null = True)
+class Artist(models.Model):
+    artist_name = models.CharField(max_length=100)
 
-    def __str__(self):
-        return self.task
+
+class Album(models.Model):
+    album_name = models.CharField(max_length=100, default="NULL_ALBUM")
+    artist_name = models.ForeignKey(Artist, related_name="albums", on_delete=models.CASCADE)
+    year = models.IntegerField(default=1)
+
+
+class Song(models.Model):
+    title = models.CharField(max_length=100, default='NULL_SONG')
+    artist_name = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    album_name = models.ForeignKey(Album, related_name="songs", on_delete=models.CASCADE)
+    play_count = models.IntegerField(default=1)
