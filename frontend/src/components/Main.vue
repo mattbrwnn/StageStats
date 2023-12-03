@@ -27,7 +27,7 @@
               </div>
             </div>
             <div class="filter-btn" v-for="filter in filters" v-bind:key="filter"><span>{{ filter.message }}</span><img
-                src="../assets/close-fill.svg" /></div>
+                src="../assets/close-fill.svg" @click="removeFilter(filter)" /></div>
           </div>
           <div class="input-group mb-3" style="display: none;">
             <input type="text" class="form-control" placeholder="Year">
@@ -67,16 +67,24 @@ export default {
   },
   methods:{
     toggleFilter(event){
+      // var filtername = event.target.text;
+      // if (JSON.parse(JSON.stringify(this.filters)).includes({message: filtername})){
+      //   console.log(""); // Still working on functionality
+      // }
+      // else{
+      //   this.filters.push({message: filtername});
+      //   console.log(JSON.parse(JSON.stringify(this.filters)));
+      // }
+      // console.log(this.filters.includes({message: filtername}));
+
       var filtername = event.target.text;
-      if (JSON.parse(JSON.stringify(this.filters)).includes({message: filtername})){
-        console.log(""); // Still working on functionality
-      }
-      else{
+      var existingFilter = this.filters.find(f => f.message === filtername);
+      if (!existingFilter){
         this.filters.push({message: filtername});
-        console.log(JSON.parse(JSON.stringify(this.filters)));
       }
-      console.log(this.filters.includes({message: filtername}));
-      
+    },
+    removeFilter(filterToRemove) {
+      this.filters = this.filters.filter(filter => filter.message !== filterToRemove.message);
     },
     selectButton(button) {
       this.selectedButton = button;
