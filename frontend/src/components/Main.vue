@@ -140,6 +140,7 @@ export default {
   margin-right: 1vh;
   margin-left: 1vh;
   box-sizing: border-box;
+  position: relative;
 }
 
 .search h2{
@@ -206,9 +207,9 @@ export default {
   display: flex;
   position: absolute;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 33em;
-  margin-left: 1.3em;
+  position: absolute;
+  bottom: 0px;
+  left: 1vw;
 }
 .show-buttons-container p {
   margin-bottom: 5px;
@@ -234,7 +235,7 @@ export default {
 
 
 .content h2, .content .songs-header {
-  display: block;
+  display: inline-block;
   text-align: left;
   padding-left: 20px;
   
