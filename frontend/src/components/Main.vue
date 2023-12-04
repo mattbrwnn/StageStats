@@ -9,10 +9,9 @@
         <h2>Search Artists</h2>
         <div class="search-container">
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter Artist Name">
-            <button type="button" class="btn btn-primary">Search</button>
-            
-          </div>
+      <input type="text" class="form-control" placeholder="Enter Artist Name" v-model="artistName">
+      <button type="button" class="btn btn-primary" @click="searchArtist">Search</button>
+    </div>
           <div class="filter-container">
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -47,6 +46,9 @@
       <section class="content">
         <h2>Contents</h2>
         <p class="songs-header">Songs most played by:</p>
+        <ul>
+          <li v-for="setlist in searchResults" :key="setlist.id">{{ setlist.name }}</li>
+        </ul>
       </section>
     </div>
 
@@ -60,6 +62,8 @@ export default {
     return {
       filters:[],
       selectedButton: '',
+      artistName: '',
+      searchResults: [],
     }
   },
   props: {
@@ -88,7 +92,24 @@ export default {
     },
     selectButton(button) {
       this.selectedButton = button;
-    }
+    },
+    searchArtist() {
+      
+      const url = `/api/setlists/${this.artistName}/`; 
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          this.searchResults = data;
+        })
+        .catch(error => {
+          console.error('Error fetching the artist data:', error);
+        });
+    },
   }
 }
 </script>
