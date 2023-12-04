@@ -5,9 +5,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Artist, Album, Song
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
+from .fmapi import get_artist_setlist
 
 class SetListAPI(APIView):
     def get(self, request, format=None, *args, **kwargs):
+        get_artist_setlist(request=request, artist_name="Pearl Jam")
         artists = Artist.objects.all()
         serializer = ArtistSerializer(artists, many=True)
         return Response(serializer.data)
