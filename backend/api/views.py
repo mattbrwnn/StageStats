@@ -9,7 +9,7 @@ from .fmapi import get_artist_setlist
 
 class SetListAPI(APIView):
     def get(self, request, format=None, *args, **kwargs):
-        get_artist_setlist(request=request, artist_name="Pearl Jam")
+        get_artist_setlist(request=request, artist_name="Pierce the Veil")
         artists = Artist.objects.all()
         serializer = ArtistSerializer(artists, many=True)
         return Response(serializer.data)
