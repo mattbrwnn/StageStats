@@ -8,11 +8,23 @@ from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 from .fmapi import get_artist_setlist
 
 class SetListAPI(APIView):
-    def get(self, request, format=None, *args, **kwargs):
-        get_artist_setlist(request=request, artist_name="Pierce the Veil")
-        artists = Artist.objects.all()
-        serializer = ArtistSerializer(artists, many=True)
-        return Response(serializer.data)
+    #def get(self, request, format=None, *args, **kwargs):
+        # get_artist_setlist(request=request, artist_name="Pierce the Veil")
+        # artists = Artist.objects.all()
+        # serializer = ArtistSerializer(artists, many=True)
+        # return Response(serializer.data)
+        
+    def get(self, request, format=None):
+        artist_name = request.query_params.get('artist', '')
+        if artist_name:
+            try:
+                song_counts_response = get_artist_setlist(request, artist_name)
+                return song_counts_response
+            except Exception as e:
+                return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({"error": "Artist name is required"}, status=status.HTTP_400_BAD_REQUEST)
+       
 
     def post(self, request):
         if 'artist_name' in request.data:

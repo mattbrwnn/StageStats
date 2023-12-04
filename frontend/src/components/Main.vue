@@ -45,10 +45,13 @@
       </section>
       <section class="content">
         <h2>Contents</h2>
-        <p class="songs-header">Songs most played by:</p>
-        <ul>
-          <li v-for="setlist in searchResults" :key="setlist['artist_name']">{{ setlist['artist_name']}}</li>
+        <p class="songs-header">Songs most played by: {{ artistName }}</p>
+        <ul class="song-list">
+          <li v-for="(count, song) in searchResults" :key="song">{{ song }}: {{ count }}</li>
         </ul>
+        <!-- <ul>
+          <li v-for="setlist in searchResults" :key="setlist['artist_name']">{{ setlist['artist_name']}}</li>
+        </ul> -->
       </section>
     </div>
 
@@ -152,6 +155,7 @@ export default {
   box-sizing: border-box;
   flex-grow: 1;
   flex-wrap: wrap;
+  max-height: 750px;
 }
 .search{
   display: flex;
@@ -223,8 +227,17 @@ export default {
   margin-right: 1vh;
   box-sizing: border-box;
   display: flex;
-  
+  max-height: 700px;
+  overflow-y: auto;
   flex-direction: column;
+}
+.song-list {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.song-list li {
+  margin: 5px 0;
 }
 .show-buttons-container {
   display: flex;
@@ -261,7 +274,7 @@ export default {
   display: inline-block;
   text-align: left;
   padding-left: 20px;
-  
+
 }
 
 .content li{

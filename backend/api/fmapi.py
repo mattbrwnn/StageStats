@@ -15,9 +15,9 @@ def get_artist_setlist(request, artist_name):
             print("Songs played by:", artist_name)
             for song, count in song_counts.items():
                 print(f"{song}: {count}")
+            return JsonResponse(song_counts, safe=False)
+            # return JsonResponse(setlists_data, safe=False)
 
-            return JsonResponse(setlists_data, safe=False)
-            
         except Exception as e:
             print(f"Error in get_artist_setlist: {e}")
             return JsonResponse({'error': str(e)}, status=500)
