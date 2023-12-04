@@ -9,10 +9,9 @@
         <h2>Search Artists</h2>
         <div class="search-container">
           <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Enter Artist Name">
-            <button type="button" class="btn btn-primary">Search</button>
-            
-          </div>
+      <input type="text" class="form-control" placeholder="Enter Artist Name" v-model="artistName">
+      <button type="button" class="btn btn-primary" @click="searchArtist">Search</button>
+    </div>
           <div class="filter-container">
             <div class="dropdown">
               <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -47,6 +46,9 @@
       <section class="content">
         <h2>Contents</h2>
         <p class="songs-header">Songs most played by:</p>
+        <ul>
+          <li v-for="setlist in searchResults" :key="setlist['artist_name']">{{ setlist['artist_name']}}</li>
+        </ul>
       </section>
     </div>
 
@@ -54,12 +56,16 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: 'MainVue',
   data(){
     return {
       filters:[],
       selectedButton: '',
+      artistName: '',
+      searchResults: [],
+      response: {},
     }
   },
   props: {
@@ -67,16 +73,6 @@ export default {
   },
   methods:{
     toggleFilter(event){
-      // var filtername = event.target.text;
-      // if (JSON.parse(JSON.stringify(this.filters)).includes({message: filtername})){
-      //   console.log(""); // Still working on functionality
-      // }
-      // else{
-      //   this.filters.push({message: filtername});
-      //   console.log(JSON.parse(JSON.stringify(this.filters)));
-      // }
-      // console.log(this.filters.includes({message: filtername}));
-
       var filtername = event.target.text;
       var existingFilter = this.filters.find(f => f.message === filtername);
       if (!existingFilter){
@@ -88,7 +84,34 @@ export default {
     },
     selectButton(button) {
       this.selectedButton = button;
-    }
+    },
+    async searchArtist() {
+      const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
+      this.response = data;
+      this.searchResults = data;
+      console.log(JSON.parse(JSON.stringify(this.searchResults)));
+      return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
+      //const url = `http://127.0.0.1:8000/setlists/api?artist=${this.artistName}/`; 
+      // fetch(url)
+      //   .then(response => {
+      //     if (!response.ok) {
+      //       throw new Error(`HTTP error! Status: ${response.status}`);
+      //     }
+      //     return response.json();
+      //   })
+      //   .then(data => {
+      //     this.searchResults = data['artist_name'];
+      //   })
+      //   .catch(error => {
+      //     console.error('Error fetching the artist data:', error);
+      //   });
+    },
+    async getAnswer() {
+      //const { data } = await axios.get("http://127.0.0.1:8000/setlists/api?format=json");
+      //this.answer = data;
+      //console.log(this.answer)
+    },
+    
   }
 }
 </script>
@@ -239,6 +262,10 @@ export default {
   text-align: left;
   padding-left: 20px;
   
+}
+
+.content li{
+  text-align: left;
 }
 
 
