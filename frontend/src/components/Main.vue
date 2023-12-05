@@ -44,7 +44,7 @@
             <button :class="{ 'btn-active': selectedButton === 'merge' }" @click="selectButton('merge')">Merge</button>
             <button :class="{ 'btn-active': selectedButton === 'quick' }" @click="selectButton('quick')">Quick</button>
           </div>
-          <h4>Time Elapsed:</h4>
+          <h4>Time Elapsed: {{ timeElapsed }}</h4>
         </div>
         
       </section>
@@ -75,6 +75,7 @@ export default {
       searchResults: [],
       response: {},
       albums: [],
+      timeElapsed: null,
     }
   },
   props: {
@@ -101,7 +102,7 @@ export default {
       );
       var json = JSON.parse(JSON.stringify(this.albums));
       console.log(json);
-      return json}, // this is just proof of concept
+      return json},
 
     shuffle(data) {
       for (let i = data.length - 1; i > 0; i--) {
@@ -124,7 +125,8 @@ export default {
       if (endpoint) {
         try {
           const response = await axios.post(`http://127.0.0.1:8000/setlists/${endpoint}`, { list: this.searchResults });
-          this.searchResults = response.data;
+          this.searchResults = response.data.sorted_data;
+          this.timeElapsed = response.data.time_elapsed;
           console.log(this.searchResults)
         } 
         catch (error) {
@@ -133,27 +135,7 @@ export default {
 
       }
     },
-    // async searchArtist() {
-    //   const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
-    //   this.response = data;
-    //   this.searchResults = data;
-    //   console.log(JSON.parse(JSON.stringify(this.searchResults)));
-    //   return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
-      //const url = `http://127.0.0.1:8000/setlists/api?artist=${this.artistName}/`; 
-      // fetch(url)
-      //   .then(response => {
-      //     if (!response.ok) {
-      //       throw new Error(`HTTP error! Status: ${response.status}`);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then(data => {
-      //     this.searchResults = data['artist_name'];
-      //   })
-      //   .catch(error => {
-      //     console.error('Error fetching the artist data:', error);
-      //   });
-    // },
+
     async getAnswer() {
       //const { data } = await axios.get("http://127.0.0.1:8000/setlists/api?format=json");
       //this.answer = data;
@@ -298,7 +280,7 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: 10px;
 }
 .buttons button {
   background-color: grey;
