@@ -1,4 +1,5 @@
 #Data Strucutre - List of tuples(First: Song, Second: Times Played)
+from timeit import default_timer as timer
 
 #Quick Sort for Descending Order
 def QuickSort(inputList, low, high):
@@ -37,7 +38,7 @@ def Partition(inputList, low, high):
 
 #Merge Sort for Descending Order
 def MergeSort(inputList, left, right):
-    if (left < right):
+    if left < right:
         middle = left + (right - left) // 2
 
         MergeSort(inputList, left, middle)
@@ -85,6 +86,16 @@ def Merge(inputList, left, middle, right):
         k += 1
 
 
+#Measure the times of both of the functions
+def QSTime(inputList):
+    start = timer()
+    QuickSort(inputList, 0, len(inputList) - 1)
+    end = timer()
+    return (end-start)
 
-
+def MSTime(inputList):
+    start = timer()
+    MergeSort(inputList, 0, len(inputList) - 1)
+    end = timer()
+    return (end-start)
 
