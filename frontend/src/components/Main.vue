@@ -271,8 +271,12 @@ export default {
   position: absolute;
   flex-direction: column;
   position: absolute;
-  bottom: 0px;
+  align-items: flex-start;
+  bottom: 300px;
   left: 1vw;
+}
+.show-buttons-container h3, .show-buttons-container h4 {
+  margin: 0 30 5px 0;
 }
 .show-buttons-container p {
   margin-bottom: 5px;
@@ -281,6 +285,7 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  margin-bottom: 5px;
 }
 .buttons button {
   background-color: grey;
