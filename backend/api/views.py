@@ -6,10 +6,10 @@ from rest_framework import status
 from .models import Artist, Album, Song
 from .algorithms import QuickSort, MergeSort
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
-from .fmapi import get_artist_setlist
 from .setlistscraper import getSongsPlayed
 from django.http import JsonResponse
 
+#Defines the API's behavior when receiving GET and POST requests, specifically used to retrieve artist song data
 class SetListAPI(APIView):
     def get(self, request, format=None):
         artist_name = request.query_params.get('artist', '')
@@ -42,6 +42,9 @@ class SetListAPI(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Handles sorting requests from the frontend
 
 class QuickSortAPI(APIView):
     def post(self, request):
