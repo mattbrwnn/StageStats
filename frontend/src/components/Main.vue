@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
   <div class="main">
     <div class="banner">
       <img alt="Vue logo" src="../assets/logo.png">
@@ -28,9 +29,13 @@
             <div class="filter-btn" v-for="filter in filters" v-bind:key="filter"><span>{{ filter.message }}</span><img
                 src="../assets/close-fill.svg" @click="removeFilter(filter)" /></div>
           </div>
-          <div class="input-group mb-3" style="display: none;">
-            <input type="text" class="form-control" placeholder="Year">
-          </div>
+          <select class="form-select form-select-lg mb-3 filter-select" v-for="filter in filters" v-bind:key="filter" aria-label=".form-select-lg example">
+            <option selected>{{filter.message}}</option>
+            <template v-if="filter.message === 'Album'">
+              <option v-for="album in albums" v-bind:key="album" value="1">{{ album['name'] }}</option>
+            </template>
+            
+          </select>
           
         </div>
         <div class="show-buttons-container">
@@ -69,6 +74,7 @@ export default {
       artistName: '',
       searchResults: [],
       response: {},
+      albums: [],
     }
   },
   props: {
@@ -89,11 +95,14 @@ export default {
       this.selectedButton = button;
     },
     async searchArtist() {
-      const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
-      this.response = data;
+      var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
+      this.albums = data['albums'];
+      delete data['albums'];
       this.searchResults = data;
-      console.log(JSON.parse(JSON.stringify(this.searchResults)));
-      return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
+      console.log(data)
+      var json = JSON.parse(JSON.stringify(this.albums));
+      console.log(json);
+      return json // this is just proof of concept
 
 
     }
@@ -264,5 +273,12 @@ export default {
   text-align: left;
 }
 
+.filter-select{
+margin-top: 1vh;
+--bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+background-color: #424242;
+border-color: #363636;
+color: #363636;
+}
 
 </style>
