@@ -54,11 +54,17 @@ export default {
   methods:{   
     // Makes a request to our DjangoAPI backend to retrieve the songs and their associated play counts
     async searchArtist() {
-      var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
+      try{
+        var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
       this.searchResults = this.shuffle(
         Object.entries(data).map(([song, count]) => [song, parseInt(count)])
       );
-      return this.searchResults},
+      return this.searchResults}
+      catch (error) {
+          console.error('Error making the sorting request:', error);
+        }
+      }
+,
 
      // Shuffles the song data for sorting because the data came pre sorted 
     shuffle(data) {
