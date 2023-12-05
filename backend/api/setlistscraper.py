@@ -18,6 +18,8 @@ def getSongsPlayed(artist_name):
     soup = BeautifulSoup(html, "html.parser")
     stattable = soup.find_all("table",)[0].findChildren('tbody', recursive=False)[0]
     names = soup.findAll('a', attrs={'class': 'songName'})
+    songs = soup.findAll('a', attrs={'class': 'chartLink'})
+    print(songs)
     counttags = soup.findAll('td', attrs={'class': 'songCount'})
     countlist = [tag.contents[0].contents[0].text for tag in counttags]
     namelist = [name.text for name in names]
@@ -34,7 +36,6 @@ def getAlbums(artist_name):
     html_bytes = page.read()
     html = html_bytes.decode("utf-8")
     soup = BeautifulSoup(html, "html.parser")
-    stattable = soup.find_all("table",)[0].findChildren('tbody', recursive=False)[0]
     names = soup.findAll('td', attrs={'class': 'songName'})
     albums = []
     for name in names:
@@ -43,3 +44,5 @@ def getAlbums(artist_name):
         except:
             pass
     return [{'name': value} for value in albums]
+
+getSongsPlayed('metallica')
