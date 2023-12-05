@@ -93,11 +93,13 @@ export default {
     },
    
     async searchArtist() {
-      const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
-      this.response = data;
+      var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
+      this.albums = data['albums'];
+      delete data['albums'];
       this.searchResults = this.shuffle(Object.entries(data));
-      console.log(JSON.parse(JSON.stringify(this.searchResults)));
-      return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
+      var json = JSON.parse(JSON.stringify(this.albums));
+      console.log(json);
+      return json // this is just proof of concept
 
     shuffle(data) {
       for (let i = data.length - 1; i > 0; i--) {
