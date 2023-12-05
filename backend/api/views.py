@@ -16,6 +16,7 @@ class SetListAPI(APIView):
         if artist_name:
             try:
                 song_counts_response = JsonResponse(getSongsPlayed(artist_name))
+                
                 return song_counts_response
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

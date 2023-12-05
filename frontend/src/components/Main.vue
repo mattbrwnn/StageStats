@@ -52,7 +52,7 @@
         <h2>Contents</h2>
         <p class="songs-header">Songs most played by: {{ artistName }}</p>
         <ul class="song-list">
-          <li v-for="(count, song) in searchResults" :key="song">{{ song }}: {{ count }}</li>
+          <li v-for="(item, index) in searchResults" :key="index">{{ index + 1 }}. "{{ item[0] }}" - {{ item[1] }}</li>
         </ul>
         <!-- <ul>
           <li v-for="setlist in searchResults" :key="setlist['artist_name']">{{ setlist['artist_name']}}</li>
@@ -96,7 +96,9 @@ export default {
       var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
       this.albums = data['albums'];
       delete data['albums'];
-      this.searchResults = this.shuffle(Object.entries(data));
+      this.searchResults = this.shuffle(
+        Object.entries(data).map(([song, count]) => [song, parseInt(count)])
+      );
       var json = JSON.parse(JSON.stringify(this.albums));
       console.log(json);
       return json}, // this is just proof of concept

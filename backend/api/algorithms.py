@@ -12,19 +12,19 @@ def QuickSort(inputList, low, high):
 #Code based on Slide 123: Sorting
 def Partition(inputList, low, high):
 
-    pivot = inputList[low][0]
+    pivot = inputList[low][1]
     up = low
     down = high
 
     while up < down:
 
         for i in range(up, high):
-            if inputList[up][0] < pivot: 
+            if inputList[up][1] < pivot: 
                 break
             up += 1
 
         for i in range(high, low, -1):
-            if inputList[down][0] > pivot:
+            if inputList[down][1] > pivot:
                 break
             down -= 1
         
@@ -66,7 +66,7 @@ def Merge(inputList, left, middle, right):
     k = left
 
     while i < size1 and j < size2:
-        if subL[i][0] >= subR[j][0]:
+        if subL[i][1] >= subR[j][1]:
             inputList[k] = subL[i]
             i += 1
         else:
