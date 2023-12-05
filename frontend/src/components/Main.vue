@@ -99,7 +99,7 @@ export default {
       this.searchResults = this.shuffle(Object.entries(data));
       var json = JSON.parse(JSON.stringify(this.albums));
       console.log(json);
-      return json // this is just proof of concept
+      return json}, // this is just proof of concept
 
     shuffle(data) {
       for (let i = data.length - 1; i > 0; i--) {
