@@ -19,7 +19,7 @@
             <button :class="{ 'btn-active': selectedButton === 'merge' }" @click="selectButton('merge')">Merge</button>
             <button :class="{ 'btn-active': selectedButton === 'quick' }" @click="selectButton('quick')">Quick</button>
           </div>
-          <h4>Time Elapsed:</h4>
+          <h4>Time Elapsed: {{ timeElapsed }}</h4>
         </div>
         
       </section>
@@ -83,7 +83,8 @@ export default {
         try {
           // sends request to API to sort the song data
           const response = await axios.post(`http://127.0.0.1:8000/setlists/${endpoint}`, { list: this.searchResults });
-          this.searchResults = response.data;
+          this.searchResults = response.data.sorted_data;
+          this.timeElapsed = response.data.time_elapsed;
           console.log(this.searchResults)
         } 
         // Catches error if API request fails
@@ -188,8 +189,12 @@ export default {
   position: absolute;
   flex-direction: column;
   position: absolute;
-  bottom: 0px;
+  align-items: flex-start;
+  bottom: 300px;
   left: 1vw;
+}
+.show-buttons-container h3, .show-buttons-container h4 {
+  margin: 0 30 5px 0;
 }
 .show-buttons-container p {
   margin-bottom: 5px;
@@ -197,7 +202,8 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
-  gap: 5px;
+  gap: 10px;
+  margin-bottom: 5px;
 }
 .buttons button {
   background-color: grey;

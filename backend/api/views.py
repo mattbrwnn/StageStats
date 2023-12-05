@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Artist, Album, Song
-from .algorithms import QuickSort, MergeSort
+from .algorithms import QSTime, MSTime
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 from .setlistscraper import getSongsPlayed
 from django.http import JsonResponse
@@ -49,11 +49,11 @@ class SetListAPI(APIView):
 class QuickSortAPI(APIView):
     def post(self, request):
         data = request.data.get('list', [])
-        QuickSort(data, 0, len(data) - 1)
-        return Response(data, status=status.HTTP_201_CREATED)
+        time_taken = QSTime(data)  # Using QSTime
+        return Response({'sorted_data': data, 'time_elapsed': time_taken}, status=status.HTTP_201_CREATED)
 
 class MergeSortAPI(APIView):
     def post(self, request):
         data = request.data.get('list', [])
-        MergeSort(data, 0, len(data) - 1)
-        return Response(data, status=status.HTTP_201_CREATED)
+        time_taken = MSTime(data)  # Using MSTime
+        return Response({'sorted_data': data, 'time_elapsed': time_taken}, status=status.HTTP_201_CREATED)
