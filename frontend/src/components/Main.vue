@@ -45,6 +45,7 @@ export default {
       artistName: '',
       searchResults: [],
       response: {},
+      timeElapsed: null,
     }
   },
   props: {
