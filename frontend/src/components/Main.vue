@@ -85,18 +85,70 @@ export default {
     removeFilter(filterToRemove) {
       this.filters = this.filters.filter(filter => filter.message !== filterToRemove.message);
     },
-    selectButton(button) {
-      this.selectedButton = button;
-    },
+   
     async searchArtist() {
       const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
       this.response = data;
-      this.searchResults = data;
-      console.log(JSON.parse(JSON.stringify(this.searchResults)));
-      return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
+      this.searchResults = this.shuffle(Object.entries(data));
+      console.log(this.searchResults);
+    },
 
+    shuffle(data) {
+      for (let i = data.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [data[i], data[j]] = [data[j], data[i]]; 
+      }
+      return data;
+    },
+    async selectButton(button) {
+      this.selectedButton = button;
+      let endpoint = '';
+      switch (button) {
+        case 'quick':
+          endpoint = 'quick-sort';
+          break;
+        case 'merge':
+          endpoint = 'merge-sort';
+          break;
+      }
+      if (endpoint) {
+        try {
+          const response = await axios.post(`http://127.0.0.1:8000${endpoint}`, { list: this.searchResults });
+          this.searchResults = response.data;
+          console.log(this.searchResults)
+        } 
+        catch (error) {
+          console.error('Error making the sorting request:', error);
+        }
 
-    }
+      }
+    },
+    // async searchArtist() {
+    //   const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
+    //   this.response = data;
+    //   this.searchResults = data;
+    //   console.log(JSON.parse(JSON.stringify(this.searchResults)));
+    //   return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
+      //const url = `http://127.0.0.1:8000/setlists/api?artist=${this.artistName}/`; 
+      // fetch(url)
+      //   .then(response => {
+      //     if (!response.ok) {
+      //       throw new Error(`HTTP error! Status: ${response.status}`);
+      //     }
+      //     return response.json();
+      //   })
+      //   .then(data => {
+      //     this.searchResults = data['artist_name'];
+      //   })
+      //   .catch(error => {
+      //     console.error('Error fetching the artist data:', error);
+      //   });
+    // },
+    async getAnswer() {
+      //const { data } = await axios.get("http://127.0.0.1:8000/setlists/api?format=json");
+      //this.answer = data;
+      //console.log(this.answer)
+    },
     
   }
 }
