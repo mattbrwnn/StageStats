@@ -1,26 +1,7 @@
 from os import name
 from rest_framework import serializers
 from .models import Album, Artist, Song
-        
-# class SongSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Song
-#         fields = ['song_title', 'artist_name', 'album_name', 'play_count']
-
-# class AlbumSerializer(serializers.ModelSerializer):
-#     songs = SongSerializer(many=True, read_only=True)
-
-#     class Meta:
-#         model = Album
-#         fields = ['album_name', 'artist_name', 'songs', 'year']
-        
-# class ArtistSerializer(serializers.ModelSerializer):
-
-#     class Meta:
-#         model = Artist
-#         fields = ['id', 'artist_name']
-        
+# Each serializer serves to format the data to be stored into the database
 class SongSerializer(serializers.ModelSerializer):
     artist_name = serializers.SlugRelatedField(
         slug_field='artist_name', 

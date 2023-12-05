@@ -1,5 +1,4 @@
 <template>
-  <!-- eslint-disable vue/no-use-v-if-with-v-for,vue/no-confusing-v-for-v-if -->
   <div class="main">
     <div class="banner">
       <img alt="Vue logo" src="../assets/logo.png">
@@ -13,30 +12,6 @@
       <input type="text" class="form-control" placeholder="Enter Artist Name" v-model="artistName">
       <button type="button" class="btn btn-primary" @click="searchArtist">Search</button>
     </div>
-          <div class="filter-container">
-            <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Filters
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a @click="toggleFilter($event)" class="dropdown-item" value="Year">Year</a>
-                <a @click="toggleFilter($event)" class="dropdown-item" value="Album">Album</a>
-                <a @click="toggleFilter($event)" class="dropdown-item" value="Tour">Tour</a>
-                <a @click="toggleFilter($event)" class="dropdown-item" value="Venue">Venue</a>
-              </div>
-            </div>
-            <div class="filter-btn" v-for="filter in filters" v-bind:key="filter"><span>{{ filter.message }}</span><img
-                src="../assets/close-fill.svg" @click="removeFilter(filter)" /></div>
-          </div>
-          <select class="form-select form-select-lg mb-3 filter-select" v-for="filter in filters" v-bind:key="filter" aria-label=".form-select-lg example">
-            <option selected>{{filter.message}}</option>
-            <template v-if="filter.message === 'Album'">
-              <option v-for="album in albums" v-bind:key="album" value="1">{{ album['name'] }}</option>
-            </template>
-            
-          </select>
-          
         </div>
         <div class="show-buttons-container">
           <h3>Show:</h3>
@@ -54,9 +29,6 @@
         <ul class="song-list">
           <li v-for="(item, index) in searchResults" :key="index">{{ index + 1 }}. "{{ item[0] }}" - {{ item[1] }}</li>
         </ul>
-        <!-- <ul>
-          <li v-for="setlist in searchResults" :key="setlist['artist_name']">{{ setlist['artist_name']}}</li>
-        </ul> -->
       </section>
     </div>
 
@@ -69,40 +41,25 @@ export default {
   name: 'MainVue',
   data(){
     return {
-      filters:[],
       selectedButton: '',
       artistName: '',
       searchResults: [],
       response: {},
-      albums: [],
     }
   },
   props: {
     msg: String
   },
-  methods:{
-    toggleFilter(event){
-      var filtername = event.target.text;
-      var existingFilter = this.filters.find(f => f.message === filtername);
-      if (!existingFilter){
-        this.filters.push({message: filtername});
-      }
-    },
-    removeFilter(filterToRemove) {
-      this.filters = this.filters.filter(filter => filter.message !== filterToRemove.message);
-    },
-   
+  methods:{   
+    // Makes a request to our DjangoAPI backend to retrieve the songs and their associated play counts
     async searchArtist() {
       var { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
-      this.albums = data['albums'];
-      delete data['albums'];
       this.searchResults = this.shuffle(
         Object.entries(data).map(([song, count]) => [song, parseInt(count)])
       );
-      var json = JSON.parse(JSON.stringify(this.albums));
-      console.log(json);
-      return json}, // this is just proof of concept
+      return this.searchResults},
 
+     // Shuffles the song data for sorting because the data came pre sorted 
     shuffle(data) {
       for (let i = data.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -110,6 +67,7 @@ export default {
       }
       return data;
     },
+    // Defines behavior for sort buttons to request the data to be sorted by the backend and returned to the frontend
     async selectButton(button) {
       this.selectedButton = button;
       let endpoint = '';
@@ -123,42 +81,18 @@ export default {
       }
       if (endpoint) {
         try {
+          // sends request to API to sort the song data
           const response = await axios.post(`http://127.0.0.1:8000/setlists/${endpoint}`, { list: this.searchResults });
           this.searchResults = response.data;
           console.log(this.searchResults)
         } 
+        // Catches error if API request fails
         catch (error) {
           console.error('Error making the sorting request:', error);
         }
 
       }
-    },
-    // async searchArtist() {
-    //   const { data } = await axios.get(`http://127.0.0.1:8000/setlists/api?artist=${this.artistName}&format=json`);
-    //   this.response = data;
-    //   this.searchResults = data;
-    //   console.log(JSON.parse(JSON.stringify(this.searchResults)));
-    //   return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
-      //const url = `http://127.0.0.1:8000/setlists/api?artist=${this.artistName}/`; 
-      // fetch(url)
-      //   .then(response => {
-      //     if (!response.ok) {
-      //       throw new Error(`HTTP error! Status: ${response.status}`);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then(data => {
-      //     this.searchResults = data['artist_name'];
-      //   })
-      //   .catch(error => {
-      //     console.error('Error fetching the artist data:', error);
-      //   });
-    // },
-    async getAnswer() {
-      //const { data } = await axios.get("http://127.0.0.1:8000/setlists/api?format=json");
-      //this.answer = data;
-      //console.log(this.answer)
-    },
+    }
     
   }
 }
@@ -227,41 +161,6 @@ export default {
   padding-right: 3vh;
   box-sizing: border-box;
 }
-
-.filter-container{
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  gap: 1vw;
-  box-sizing: border-box;
-}
-
-.search .search-container .filter-container .dropdown{
-  display: flex;
-}
-
-.filter-btn{
-  display: flex;
-  background-color: #0d6efd;
-  border-radius: .5vh;
-  position: relative;
-  width: 5rem;
-  height: 2.5rem;
-  justify-content: center;
-  align-items: center;
-}
-
-.filter-btn span{
-
-}
-.filter-btn img{
-  width: 1.2rem;
-  box-sizing: border-box;
-  position: absolute;
-  top:0px;
-  right:0px;
-}
-
 .content{
   flex-basis: 30vw;
   padding-top: 15px;
@@ -326,12 +225,5 @@ export default {
   text-align: left;
 }
 
-.filter-select{
-margin-top: 1vh;
---bs-form-select-bg-img: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
-background-color: #424242;
-border-color: #363636;
-color: #363636;
-}
 
 </style>
