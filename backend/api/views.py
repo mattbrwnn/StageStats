@@ -6,19 +6,16 @@ from rest_framework import status
 from .models import Artist, Album, Song
 from .serializers import ArtistSerializer, AlbumSerializer, SongSerializer
 from .fmapi import get_artist_setlist
+from .setlistscraper import getSongsPlayed
+from django.http import JsonResponse
 
 class SetListAPI(APIView):
-    #def get(self, request, format=None, *args, **kwargs):
-        # get_artist_setlist(request=request, artist_name="Pierce the Veil")
-        # artists = Artist.objects.all()
-        # serializer = ArtistSerializer(artists, many=True)
-        # return Response(serializer.data)
-        
+    
     def get(self, request, format=None):
         artist_name = request.query_params.get('artist', '')
         if artist_name:
             try:
-                song_counts_response = get_artist_setlist(request, artist_name)
+                song_counts_response = JsonResponse(getSongsPlayed(artist_name))
                 return song_counts_response
             except Exception as e:
                 return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

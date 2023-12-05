@@ -94,26 +94,9 @@ export default {
       this.searchResults = data;
       console.log(JSON.parse(JSON.stringify(this.searchResults)));
       return JSON.parse(JSON.stringify(this.searchResults))  // this is just proof of concept
-      //const url = `http://127.0.0.1:8000/setlists/api?artist=${this.artistName}/`; 
-      // fetch(url)
-      //   .then(response => {
-      //     if (!response.ok) {
-      //       throw new Error(`HTTP error! Status: ${response.status}`);
-      //     }
-      //     return response.json();
-      //   })
-      //   .then(data => {
-      //     this.searchResults = data['artist_name'];
-      //   })
-      //   .catch(error => {
-      //     console.error('Error fetching the artist data:', error);
-      //   });
-    },
-    async getAnswer() {
-      //const { data } = await axios.get("http://127.0.0.1:8000/setlists/api?format=json");
-      //this.answer = data;
-      //console.log(this.answer)
-    },
+
+
+    }
     
   }
 }
