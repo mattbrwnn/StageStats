@@ -121,7 +121,7 @@ export default {
       }
       if (endpoint) {
         try {
-          const response = await axios.post(`http://127.0.0.1:8000${endpoint}`, { list: this.searchResults });
+          const response = await axios.post(`http://127.0.0.1:8000/setlists/${endpoint}`, { list: this.searchResults });
           this.searchResults = response.data;
           console.log(this.searchResults)
         } 
