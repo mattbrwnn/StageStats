@@ -1,5 +1,3 @@
-# StageStats
-Project 3a COP3530
 
 Project Structure
 
